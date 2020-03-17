@@ -1,0 +1,2 @@
+rootProject.name='example'
+include ':app', ':redux', ':redux_enhancers'
