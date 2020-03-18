@@ -28,5 +28,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-apply from: 'redux/publish.gradle'

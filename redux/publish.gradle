@@ -7,7 +7,7 @@ group 'com.wh2' // whatever group name you'd like
 publishing {
     publications {
         Production(MavenPublication) {
-            artifact("$buildDir/outputs/aar/redux-release.aar") // replace with your library name
+            artifact("$buildDir/libs/redux-${this.version}.jar") // replace with your library name
             groupId this.group
             artifactId 'redux' // replace with your library artifact id
             version this.version
