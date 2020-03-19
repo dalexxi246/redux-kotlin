@@ -2,7 +2,7 @@ package com.wh2.redux
 
 interface Action
 typealias Reducer<State> = (State, Action) -> State
-typealias Subscription<OldState, NewState> = (OldState, NewState) -> Unit
+typealias Subscription<NewState> = (NewState) -> Unit
 typealias Unsubscribe = () -> Unit
 
 interface Store<State> {
@@ -10,6 +10,6 @@ interface Store<State> {
     fun getState() : State
     fun getOldState() : State
     fun dispatch(action: Action)
-    fun subscribe(subscription: Subscription<State, State>) : Unsubscribe
+    fun subscribe(subscription: Subscription<State>) : Unsubscribe
 
 }

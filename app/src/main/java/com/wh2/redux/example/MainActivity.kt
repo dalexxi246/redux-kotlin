@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        reduxStore.subscribe { _, new ->
+        reduxStore.subscribe { new ->
             textView_result.text = "$new"
         }
         button_sum.setOnClickListener { reduxStore.dispatch(ExampleAction.Sum(1)) }

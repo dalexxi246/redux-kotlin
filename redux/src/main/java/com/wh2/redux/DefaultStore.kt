@@ -8,7 +8,7 @@ class DefaultStore<State>(
 
     private var currentState: State = initialState
     private var oldState: State = initialState
-    private val subscriptions: ArrayList<Subscription<State, State>> = arrayListOf()
+    private val subscriptions: ArrayList<Subscription<State>> = arrayListOf()
 
     override fun getState(): State = currentState
 
@@ -22,14 +22,14 @@ class DefaultStore<State>(
         }
         oldState = currentState
         currentState = newState
-        subscriptions.forEach { subscription: Subscription<State, State> ->
-            subscription(oldState, currentState)
+        subscriptions.forEach { subscription: Subscription<State> ->
+            subscription(oldState)
         }
     }
 
-    override fun subscribe(subscription: Subscription<State, State>): Unsubscribe {
+    override fun subscribe(subscription: Subscription<State>): Unsubscribe {
         subscriptions.add(subscription)
-        subscription(oldState, currentState)
+        subscription(oldState)
         return { subscriptions.remove(subscription) }
     }
 
