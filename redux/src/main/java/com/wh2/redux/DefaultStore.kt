@@ -7,12 +7,9 @@ class DefaultStore<State>(
 ) : Store<State> {
 
     private var currentState: State = initialState
-    private var oldState: State = initialState
     private val subscriptions: ArrayList<Subscription<State>> = arrayListOf()
 
     override fun getState(): State = currentState
-
-    override fun getOldState(): State = oldState
 
     override fun dispatch(action: Action) {
         val newAction = applyMiddleware(::getState, action)
@@ -20,17 +17,16 @@ class DefaultStore<State>(
         if (newState == currentState) {
             return
         }
-        oldState = currentState
         currentState = newState
         subscriptions.forEach { subscription: Subscription<State> ->
-            subscription(oldState)
+            subscription(newState)
         }
     }
 
-    override fun subscribe(subscription: Subscription<State>): Unsubscribe {
+    override fun subscribe(subscription: Subscription<State>): StoreDisposable {
         subscriptions.add(subscription)
-        subscription(oldState)
-        return { subscriptions.remove(subscription) }
+        subscription(currentState)
+        return StoreDisposable { subscriptions.remove(subscription) }
     }
 
     private fun applyMiddleware(state: StateAccessor<State>, action: Action): Action {
@@ -42,7 +38,7 @@ class DefaultStore<State>(
             return { _, action, _ -> action }
         }
 
-        return { state, action, dispatch -> middlewares[index].invoke(state, action, dispatch, next(index + 1)) }
+        return { state, action, dispatch -> middlewares[index](state, action, dispatch, next(index + 1)) }
     }
 
     private fun applyReducers(current: State, action: Action): State {

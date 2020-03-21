@@ -5,12 +5,12 @@ typealias SubStateFilter<State, SubState> = (State) -> SubState
 fun <State, SubState> Store<State>.subscribe(
     subStateFilter: SubStateFilter<State, SubState>,
     subscription: (SubState) -> Unit
-): Unsubscribe {
+): StoreDisposable {
 
-    return subscribe { newState: State ->
-
-        val newSubState = subStateFilter(newState)
-        subscription(newSubState)
-
+    return StoreDisposable {
+        subscribe { newState: State ->
+            val newSubState = subStateFilter(newState)
+            subscription(newSubState)
+        }
     }
 }
