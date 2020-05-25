@@ -29,8 +29,8 @@ class DefaultStore<State>(
         return StoreDisposable { subscriptions.remove(subscription) }
     }
 
-    private fun applyMiddleware(state: StateAccessor<State>, action: Action): Action {
-        return next(0)(state, action, ::dispatch)
+    private fun applyMiddleware(getState: GetState<State>, action: Action): Action {
+        return next(0)(getState, action, ::dispatch)
     }
 
     private fun next(index: Int): Next<State> {
